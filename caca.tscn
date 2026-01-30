@@ -1,6 +1,14 @@
-[gd_scene format=3 uid="uid://bonim6fqbnrpd"]
+[gd_scene load_steps=3 format=3 uid="uid://bonim6fqbnrpd"]
+
+[ext_resource type="PackedScene" uid="uid://cwg7ammc74ip5" path="res://player.tscn" id="1_l3ps7"]
+[ext_resource type="PackedScene" uid="uid://c6sjcd6xxo2hm" path="res://enemy.tscn" id="3_3kxu0"]
 
 [node name="caca" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 format = 2
+[node name="Player" parent="." instance=ExtResource("1_l3ps7")]
+position = Vector2(717, 707)
+
+[node name="Enemy" parent="." instance=ExtResource("3_3kxu0")]
+position = Vector2(621, 430)
