@@ -5,6 +5,8 @@
 
 [node name="caca" type="Node2D"]
 
+[node name="TileMap" type="TileMap" parent="."]
+format = 2
 [node name="Player" parent="." instance=ExtResource("1_l3ps7")]
 position = Vector2(717, 707)
 
