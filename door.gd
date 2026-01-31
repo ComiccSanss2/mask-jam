@@ -32,7 +32,7 @@ func check_door_status():
 	if generators_fixed_count < total_generators_needed:
 		# Calcul pour dire combien il en reste
 		var remaining = total_generators_needed - generators_fixed_count
-		current_player_ref.show_dialogue("Need " + str(remaining) + " more generators.")
+		current_player_ref.show_dialogue("NEED " + str(remaining) + " MORE POWER SUPPLIES.")
 
 # --- LOGIQUE ---
 func fix_generator():
@@ -53,7 +53,7 @@ func open_door():
 	collision.set_deferred("disabled", true)
 	
 	if current_player_ref:
-		current_player_ref.show_dialogue("Door Opened !")
+		current_player_ref.show_dialogue("DOOR OPENED !")
 
 func close_door():
 	is_open = false

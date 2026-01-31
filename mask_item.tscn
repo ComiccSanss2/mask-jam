@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://bs7b7clj3fkc7"]
+[gd_scene load_steps=6 format=3 uid="uid://bs7b7clj3fkc7"]
 
 [ext_resource type="Script" uid="uid://ceabil2tin3fx" path="res://mask_item.gd" id="1_nt046"]
 [ext_resource type="Texture2D" uid="uid://b11xwt8fum5gc" path="res://assets/mask-item.png" id="2_nt046"]
+[ext_resource type="FontFile" uid="uid://dsmpymda21d0v" path="res://assets/real-vhs-font/RealVhsFontRegular-WyV0z.ttf" id="3_wcjoa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nt046"]
 radius = 21.095022
+
+[sub_resource type="LabelSettings" id="LabelSettings_mc1qy"]
+font = ExtResource("3_wcjoa")
+font_size = 35
+font_color = Color(1, 1, 0.3764706, 1)
 
 [node name="MaskItem" type="Area2D"]
 script = ExtResource("1_nt046")
@@ -17,10 +23,10 @@ texture = ExtResource("2_nt046")
 shape = SubResource("CircleShape2D_nt046")
 
 [node name="Label" type="Label" parent="."]
-visible = false
 texture_filter = 1
-offset_left = -56.0
+offset_left = -75.0
 offset_top = -49.0
-offset_right = 57.0
-offset_bottom = -26.0
-text = "E to take mask"
+offset_right = 79.0
+offset_bottom = -25.0
+text = "[E] TO TAKE MASK."
+label_settings = SubResource("LabelSettings_mc1qy")

@@ -137,7 +137,7 @@ func add_mask():
 	update_mask_ui()
 
 func update_mask_ui():
-	if mask_label: mask_label.text = "Masks: " + str(masks_count)
+	if mask_label: mask_label.text = "MASKS: " + str(masks_count)
 	
 	if help_label:
 		if masks_count > 0 and not is_hidden: help_label.visible = true

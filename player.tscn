@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://cwg7ammc74ip5"]
+[gd_scene load_steps=93 format=3 uid="uid://cwg7ammc74ip5"]
 
 [ext_resource type="Script" uid="uid://jgqkpj8rsgw6" path="res://player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cfk37cbse60oa" path="res://assets/light.png" id="3_i3pqv"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b00vg0xrcjrm2" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-002.png" id="5_nvl01"]
 [ext_resource type="AudioStream" uid="uid://db8ljkeiw3ito" path="res://assets/Screamer 1 high pitch.wav" id="5_sweqy"]
 [ext_resource type="Texture2D" uid="uid://cuyx0660q2wp5" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-003.png" id="6_ivps1"]
+[ext_resource type="FontFile" uid="uid://dsmpymda21d0v" path="res://assets/real-vhs-font/RealVhsFontRegular-WyV0z.ttf" id="6_urp6f"]
 [ext_resource type="Texture2D" uid="uid://do0qaocbu4fat" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-004.png" id="7_urp6f"]
 [ext_resource type="Texture2D" uid="uid://b1nod2vc6nxog" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-005.png" id="8_bwjto"]
 [ext_resource type="Texture2D" uid="uid://gx665p12dee5" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-006.png" id="9_606se"]
@@ -589,13 +590,17 @@ shader_parameter/glow_strength = 0.25
 shader_parameter/glow_threshold = 0.65
 
 [sub_resource type="LabelSettings" id="LabelSettings_n7ghd"]
-font_size = 50
+font = ExtResource("6_urp6f")
+font_size = 180
+font_color = Color(1, 1, 0.3764706, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_nvl01"]
-font_size = 30
+font = ExtResource("6_urp6f")
+font_size = 160
 
 [sub_resource type="LabelSettings" id="LabelSettings_ivps1"]
-font_size = 60
+font = ExtResource("6_urp6f")
+font_size = 100
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u1c27"]
 animations = [{
@@ -650,6 +655,7 @@ texture = ExtResource("3_i3pqv")
 texture_scale = 0.01
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 6
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_urp6f")
@@ -664,28 +670,28 @@ layer = 5
 
 [node name="MaskLabel" type="Label" parent="HUD"]
 z_index = 5
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -137.0
-offset_right = 230.0
-offset_bottom = 4.0
-grow_vertical = 0
-text = "Masks: 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -105.0
+offset_top = 34.0
+offset_right = 106.0
+offset_bottom = 175.0
+grow_horizontal = 2
+text = "MASKS: 0
 "
 label_settings = SubResource("LabelSettings_n7ghd")
 
 [node name="HelpLabel" type="Label" parent="HUD"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -75.0
-offset_right = 232.0
-offset_bottom = -33.0
-grow_vertical = 0
-text = "[SPACE] to Use"
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -294.0
+offset_top = 123.0
+offset_right = 295.0
+offset_bottom = 230.0
+grow_horizontal = 2
+text = "[SPACE] TO USE"
 label_settings = SubResource("LabelSettings_nvl01")
 
 [node name="DialoguePanel" type="PanelContainer" parent="HUD"]
@@ -695,9 +701,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -623.0
-offset_top = -380.0
+offset_top = -471.0
 offset_right = 671.0
-offset_bottom = -180.0
+offset_bottom = -271.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -709,6 +715,7 @@ vertical_alignment = 1
 
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10
+visible = false
 
 [node name="JumpscareAnim" type="AnimatedSprite2D" parent="JumpscareLayer"]
 visibility_layer = 3

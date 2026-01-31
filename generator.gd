@@ -30,7 +30,7 @@ func _input(event):
 func try_fix_generator():
 	# 1. Si déjà réparé, on affiche un autre message
 	if is_fixed:
-		current_player_ref.show_dialogue("Already running.")
+		current_player_ref.show_dialogue("ALREADY RUNNING.")
 		return
 
 	# --- ON ACTIVE ---
@@ -41,7 +41,7 @@ func try_fix_generator():
 	sprite_on.visible = true
 	
 	# --- LE MESSAGE QUE TU VOULAIS ---
-	current_player_ref.show_dialogue("Power supply repaired")
+	current_player_ref.show_dialogue("POWER SUPPLY REPAIRED.")
 	
 	# On prévient la porte (si elle est connectée)
 	if target_door and target_door.has_method("fix_generator"):
