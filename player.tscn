@@ -1,12 +1,44 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwg7ammc74ip5"]
+[gd_scene load_steps=13 format=3 uid="uid://cwg7ammc74ip5"]
 
 [ext_resource type="Texture2D" uid="uid://b1xvofhv6yqvv" path="res://New Piskel (5).png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://jgqkpj8rsgw6" path="res://player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cfk37cbse60oa" path="res://assets/light.png" id="3_i3pqv"]
-[ext_resource type="Texture2D" uid="uid://b1ctwdh277kn2" path="res://assets/WhatsApp Image 2026-01-31 at 02.22.33.jpeg" id="4_hqtel"]
+[ext_resource type="Texture2D" uid="uid://dda442p8l2umc" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-001.png" id="4_n7ghd"]
+[ext_resource type="Texture2D" uid="uid://b00vg0xrcjrm2" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-002.png" id="5_nvl01"]
+[ext_resource type="AudioStream" uid="uid://db8ljkeiw3ito" path="res://assets/Screamer 1 high pitch.wav" id="5_sweqy"]
+[ext_resource type="Texture2D" uid="uid://cuyx0660q2wp5" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-003.png" id="6_ivps1"]
+[ext_resource type="Texture2D" uid="uid://do0qaocbu4fat" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-004.png" id="7_urp6f"]
+[ext_resource type="Texture2D" uid="uid://b1nod2vc6nxog" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-005.png" id="8_bwjto"]
+[ext_resource type="Texture2D" uid="uid://gx665p12dee5" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-006.png" id="9_606se"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
 size = Vector2(20, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u1c27"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_n7ghd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_nvl01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ivps1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_urp6f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_bwjto")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_606se")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 2
@@ -24,17 +56,20 @@ zoom = Vector2(4, 4)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 scale = Vector2(50, 50)
-energy = 3.0
 texture = ExtResource("3_i3pqv")
 texture_scale = 0.01
 
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10
 
-[node name="TextureRect" type="TextureRect" parent="JumpscareLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_hqtel")
+[node name="JumpscareAnim" type="AnimatedSprite2D" parent="JumpscareLayer"]
+visibility_layer = 3
+texture_filter = 1
+position = Vector2(1638.5002, 993)
+scale = Vector2(7.8844533, 3.341982)
+sprite_frames = SubResource("SpriteFrames_u1c27")
+frame = 5
+frame_progress = 1.0
+
+[node name="ScreamSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_sweqy")

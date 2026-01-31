@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://45cixd6jjyxp"
+path="res://.godot/imported/Screamer 1 slow pitch low.wav-6e6ebbba1937c1b792d6c500a1a03c3f.sample"
+
+[deps]
+
+source_file="res://assets/Screamer 1 slow pitch low.wav"
+dest_files=["res://.godot/imported/Screamer 1 slow pitch low.wav-6e6ebbba1937c1b792d6c500a1a03c3f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
