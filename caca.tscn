@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bonim6fqbnrpd"]
+[gd_scene load_steps=28 format=3 uid="uid://bonim6fqbnrpd"]
 
 [ext_resource type="Texture2D" uid="uid://hnp2jdge4yoj" path="res://assets/New Piskel.png" id="1_l3ps7"]
 [ext_resource type="Texture2D" uid="uid://dx6m3qqrlvqij" path="res://assets/Big 32x32 Tileset/Single Sprite/Full Spritesheet.png" id="2_2th4p"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bomw6ojfop70m" path="res://assets/Public_Bathroom/dirty_publicbathroom_set_withshadow.png" id="9_g26ji"]
 [ext_resource type="PackedScene" uid="uid://bs7b7clj3fkc7" path="res://mask_item.tscn" id="13_g26ji"]
 [ext_resource type="PackedScene" uid="uid://cap5bbum74jif" path="res://door.tscn" id="14_v5rk7"]
+[ext_resource type="PackedScene" uid="uid://sba1apa4so4y" path="res://generator.tscn" id="15_5twr1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2528b"]
 texture = ExtResource("1_l3ps7")
@@ -2002,3 +2003,18 @@ position = Vector2(149, -10)
 [node name="StaticBody2D" parent="." instance=ExtResource("14_v5rk7")]
 position = Vector2(1872, -1178)
 scale = Vector2(3, 3)
+
+[node name="Generator" parent="." node_paths=PackedStringArray("target_door") instance=ExtResource("15_5twr1")]
+position = Vector2(179, -459)
+scale = Vector2(0.7, 0.7)
+target_door = NodePath("../StaticBody2D")
+
+[node name="Generator2" parent="." node_paths=PackedStringArray("target_door") instance=ExtResource("15_5twr1")]
+position = Vector2(902.99994, 505)
+scale = Vector2(0.7, 0.7)
+target_door = NodePath("../StaticBody2D")
+
+[node name="Generator3" parent="." node_paths=PackedStringArray("target_door") instance=ExtResource("15_5twr1")]
+position = Vector2(895, -455)
+scale = Vector2(0.7, 0.7)
+target_door = NodePath("../StaticBody2D")

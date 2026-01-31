@@ -709,7 +709,6 @@ vertical_alignment = 1
 
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10
-visible = false
 
 [node name="JumpscareAnim" type="AnimatedSprite2D" parent="JumpscareLayer"]
 visibility_layer = 3
