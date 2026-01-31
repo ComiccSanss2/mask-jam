@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bonim6fqbnrpd"]
+[gd_scene load_steps=10 format=3 uid="uid://bonim6fqbnrpd"]
 
 [ext_resource type="Texture2D" uid="uid://hnp2jdge4yoj" path="res://assets/New Piskel.png" id="1_l3ps7"]
 [ext_resource type="Texture2D" uid="uid://w4ydo6h1c2u2" path="res://assets/New Piskel(1).png" id="2_qsrek"]
 [ext_resource type="PackedScene" uid="uid://c6sjcd6xxo2hm" path="res://enemy.tscn" id="3_50vqv"]
 [ext_resource type="PackedScene" uid="uid://cwg7ammc74ip5" path="res://player.tscn" id="4_uco6l"]
+[ext_resource type="AudioStream" uid="uid://dhqxebl82djjq" path="res://assets/scare.wav" id="5_50vqv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2528b"]
 texture = ExtResource("1_l3ps7")
@@ -49,3 +50,8 @@ position = Vector2(147, 1047)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0, 0, 0, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_50vqv")
+volume_db = -5.572
+autoplay = true

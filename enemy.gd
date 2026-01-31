@@ -140,7 +140,7 @@ func play_tension():
 	
 	# 3. On crée la nouvelle animation (Fade In)
 	audio_tween = get_tree().create_tween()
-	audio_tween.tween_property(tension_sound, "volume_db", 0.0, 2.0)
+	audio_tween.tween_property(tension_sound, "volume_db", -10.0, 2.0)
 
 func stop_tension():
 	# 1. On annule toute animation précédente (montée de volume)
