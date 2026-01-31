@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bonim6fqbnrpd"]
+[gd_scene load_steps=26 format=3 uid="uid://bonim6fqbnrpd"]
 
 [ext_resource type="Texture2D" uid="uid://hnp2jdge4yoj" path="res://assets/New Piskel.png" id="1_l3ps7"]
 [ext_resource type="Texture2D" uid="uid://dx6m3qqrlvqij" path="res://assets/Big 32x32 Tileset/Single Sprite/Full Spritesheet.png" id="2_2th4p"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://blc45psahahan" path="res://assets/Dungeons and Pixels — Free Demo/Tilesets/Tileset_Dungeon.png" id="6_kfo1m"]
 [ext_resource type="Texture2D" uid="uid://lhwf2cb1okdt" path="res://assets/Dungeons and Pixels — Free Demo/Tilesets/Props_Animated.png" id="7_3hjnf"]
 [ext_resource type="Texture2D" uid="uid://bomw6ojfop70m" path="res://assets/Public_Bathroom/dirty_publicbathroom_set_withshadow.png" id="9_g26ji"]
+[ext_resource type="PackedScene" uid="uid://bs7b7clj3fkc7" path="res://mask_item.tscn" id="13_g26ji"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2528b"]
 texture = ExtResource("1_l3ps7")
@@ -1990,3 +1991,9 @@ color = Color(0, 0, 0, 1)
 stream = ExtResource("5_50vqv")
 volume_db = -5.572
 autoplay = true
+
+[node name="MaskItem" parent="." instance=ExtResource("13_g26ji")]
+position = Vector2(487, 561)
+
+[node name="MaskItem2" parent="." instance=ExtResource("13_g26ji")]
+position = Vector2(149, -10)
