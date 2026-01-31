@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c6sjcd6xxo2hm"]
+[gd_scene load_steps=6 format=3 uid="uid://c6sjcd6xxo2hm"]
 
 [ext_resource type="Script" uid="uid://0dhrr2xq0ony" path="res://enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://q5nl2ngwedhw" path="res://New Piskel (6).png" id="2_qi2p4"]
@@ -7,7 +7,10 @@
 size = Vector2(20, 32)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4gyqm"]
-radius = 62.03225
+radius = 284.00177
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qi2p4"]
+radius = 19.0
 
 [node name="Enemy" type="CharacterBody2D"]
 motion_mode = 1
@@ -27,14 +30,22 @@ target_desired_distance = 30.0
 [node name="Timer" type="Timer" parent="."]
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_4gyqm")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(0, 62)
+target_position = Vector2(1, 286)
 collision_mask = 3
+
+[node name="KillArea" type="Area2D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea"]
+shape = SubResource("CircleShape2D_qi2p4")
 
 [connection signal="target_reached" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_target_reached"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="KillArea" to="." method="_on_kill_area_body_entered"]
