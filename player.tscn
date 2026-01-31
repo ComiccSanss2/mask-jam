@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://cwg7ammc74ip5"]
+[gd_scene load_steps=90 format=3 uid="uid://cwg7ammc74ip5"]
 
 [ext_resource type="Script" uid="uid://jgqkpj8rsgw6" path="res://player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cfk37cbse60oa" path="res://assets/light.png" id="3_i3pqv"]
@@ -560,13 +560,16 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
-size = Vector2(20, 32)
+size = Vector2(22, 22)
 
 [sub_resource type="LabelSettings" id="LabelSettings_n7ghd"]
 font_size = 50
 
 [sub_resource type="LabelSettings" id="LabelSettings_nvl01"]
 font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_ivps1"]
+font_size = 60
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u1c27"]
 animations = [{
@@ -594,7 +597,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 2
 script = ExtResource("1_onrkg")
 
@@ -604,15 +607,17 @@ stream = ExtResource("5_sweqy")
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_iruf7")
-animation = &"walk-up-right"
+animation = &"walk-down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 7)
 shape = SubResource("RectangleShape2D_onrkg")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 1)
 scale = Vector2(50, 50)
 energy = 2.0
 texture = ExtResource("3_i3pqv")
@@ -646,6 +651,25 @@ offset_bottom = -33.0
 grow_vertical = 0
 text = "[SPACE] to Use"
 label_settings = SubResource("LabelSettings_nvl01")
+
+[node name="DialoguePanel" type="PanelContainer" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -623.0
+offset_top = -380.0
+offset_right = 671.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DialogueLabel" type="Label" parent="HUD/DialoguePanel"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_ivps1")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10

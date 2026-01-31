@@ -14,33 +14,51 @@ extends CharacterBody2D
 var masks_count : int = 0
 var is_hidden : bool = false 
 
+# --- VARIABLES AUDIO (Fades) ---
+var default_volume_db : float = 0.0 
+var audio_tween : Tween
+
 # --- RÉFÉRENCES ---
 # Jumpscare
 @onready var jumpscare_layer = $JumpscareLayer
 @onready var jumpscare_anim = $JumpscareLayer/JumpscareAnim 
 @onready var scream_sound = $ScreamSound
 
-# Personnage & UI & Sons
+# Personnage & Lumière
 @onready var light = $PointLight2D
+@onready var character_anim = $CharacterAnim
+
+# Audio
+@onready var footsteps_sound = $FootstepsSound
+
+# UI (HUD)
 @onready var mask_label = $HUD/MaskLabel
 @onready var help_label = $HUD/HelpLabel 
-@onready var character_anim = $CharacterAnim
-@onready var footsteps_sound = $FootstepsSound
+@onready var dialogue_panel = $HUD/DialoguePanel 
+@onready var dialogue_label = $HUD/DialoguePanel/DialogueLabel
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
+	# Initialisation Jumpscare
 	if jumpscare_layer: jumpscare_layer.visible = false
+	
+	# Initialisation Lumière
 	if light: light.scale = Vector2(light_normal_size, light_normal_size)
 	
+	# Initialisation Audio
+	if footsteps_sound: default_volume_db = footsteps_sound.volume_db
+	
+	# Initialisation Dialogue
+	if dialogue_panel: dialogue_panel.visible = false
+	
 	update_mask_ui()
-	# On le fait une fois au début, mais on le refera à la mort par sécurité
 	ajuster_jumpscare()
 
 func _physics_process(delta: float) -> void:
 	if get_tree().paused: return
 
-	# 1. Masque
+	# 1. Utilisation du Masque
 	if Input.is_action_just_pressed("use_mask"):
 		try_use_mask()
 
@@ -51,19 +69,22 @@ func _physics_process(delta: float) -> void:
 		# --- ON BOUGE ---
 		velocity = velocity.move_toward(input_vector * speed, acceleration * delta)
 		
-		# Animation 8 directions
+		# Animation du personnage
 		update_animation(input_vector)
 		
-		# Audio : Pas
-		if not footsteps_sound.playing:
-			footsteps_sound.pitch_scale = randf_range(0.9, 1.1)
-			footsteps_sound.play()
+		# Audio : Fade In des pas
+		if not footsteps_sound.playing or footsteps_sound.volume_db <= -60.0:
+			play_footsteps_smooth()
 			
 	else:
 		# --- ON NE BOUGE PLUS ---
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+		
 		character_anim.stop()
-		if footsteps_sound.playing: footsteps_sound.stop()
+		
+		# Audio : Fade Out des pas
+		if footsteps_sound.playing and footsteps_sound.volume_db > -60.0:
+			stop_footsteps_smooth()
 
 	move_and_slide()
 
@@ -80,29 +101,44 @@ func update_animation(direction: Vector2):
 	if character_anim.sprite_frames.has_animation(anim_name):
 		character_anim.play(anim_name)
 
+# --- GESTION AUDIO (FADES) ---
+func play_footsteps_smooth():
+	if audio_tween: audio_tween.kill()
+	
+	if not footsteps_sound.playing:
+		footsteps_sound.volume_db = -80.0
+		footsteps_sound.pitch_scale = randf_range(0.9, 1.1)
+		footsteps_sound.play()
+	
+	audio_tween = get_tree().create_tween()
+	audio_tween.tween_property(footsteps_sound, "volume_db", default_volume_db, 0.1)
+
+func stop_footsteps_smooth():
+	if audio_tween: audio_tween.kill()
+	
+	audio_tween = get_tree().create_tween()
+	audio_tween.tween_property(footsteps_sound, "volume_db", -80.0, 0.25)
+	audio_tween.tween_callback(footsteps_sound.stop)
+
 # --- GESTION JUMPSCARE (Full Screen) ---
 func ajuster_jumpscare():
-	# On s'assure qu'on travaille sur la taille ACTUELLE de l'écran
 	var ecran_size = get_viewport_rect().size
-	
-	# On centre
 	jumpscare_anim.position = ecran_size / 2
 	
-	# On calcule l'échelle
 	var texture = jumpscare_anim.sprite_frames.get_frame_texture("default", 0)
 	if texture:
 		var image_size = texture.get_size()
-		# On prend le ratio le plus grand pour couvrir tout l'écran sans bandes noires
 		var final_scale = max(ecran_size.x / image_size.x, ecran_size.y / image_size.y)
 		jumpscare_anim.scale = Vector2(final_scale, final_scale)
 
-# --- MASQUE & UI ---
+# --- SYSTEME DE MASQUE (GAMEPLAY) ---
 func add_mask():
 	masks_count += 1
 	update_mask_ui()
 
 func update_mask_ui():
 	if mask_label: mask_label.text = "Masks: " + str(masks_count)
+	
 	if help_label:
 		if masks_count > 0 and not is_hidden: help_label.visible = true
 		else: help_label.visible = false
@@ -116,33 +152,44 @@ func try_use_mask():
 func activate_stealth_mode():
 	is_hidden = true
 	if help_label: help_label.visible = false
+	
 	if light:
 		var tween = get_tree().create_tween()
 		tween.tween_property(light, "scale", Vector2(light_hidden_size, light_hidden_size), 0.5)
+	
 	await get_tree().create_timer(mask_duration).timeout
 	deactivate_stealth_mode()
 
 func deactivate_stealth_mode():
 	is_hidden = false
 	update_mask_ui()
+	
 	if light:
 		var tween = get_tree().create_tween()
 		tween.tween_property(light, "scale", Vector2(light_normal_size, light_normal_size), 0.5)
 
-# --- MORT ---
+# --- SYSTEME DE DIALOGUE UNIVERSEL ---
+func show_dialogue(text_to_show: String):
+	if dialogue_panel and dialogue_label:
+		dialogue_label.text = text_to_show
+		dialogue_panel.visible = true
+		
+		await get_tree().create_timer(3.0).timeout
+		
+		if dialogue_label.text == text_to_show:
+			dialogue_panel.visible = false
+
+# --- MORT DU JOUEUR ---
 func kill_player():
 	if get_tree().paused: return
 	
 	print("JUMPSCARE !")
 	
-	# 1. On coupe le son des pas pour laisser place au cri
-	if footsteps_sound.playing: footsteps_sound.stop()
+	if audio_tween: audio_tween.kill() 
+	footsteps_sound.stop()
 	
-	# 2. IMPORTANT : On recalcule la taille du screamer MAINTENANT
-	# C'est ça qui corrige le bug d'affichage après le masque
 	ajuster_jumpscare()
 	
-	# 3. Affichage
 	jumpscare_layer.visible = true
 	jumpscare_anim.play("default")
 	if scream_sound: scream_sound.play()
