@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cwg7ammc74ip5"]
+[gd_scene load_steps=15 format=3 uid="uid://cwg7ammc74ip5"]
 
 [ext_resource type="Texture2D" uid="uid://b1xvofhv6yqvv" path="res://New Piskel (5).png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://jgqkpj8rsgw6" path="res://player.gd" id="1_onrkg"]
@@ -16,6 +16,9 @@ size = Vector2(20, 32)
 
 [sub_resource type="LabelSettings" id="LabelSettings_n7ghd"]
 font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_nvl01"]
+font_size = 30
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u1c27"]
 animations = [{
@@ -74,15 +77,30 @@ z_index = 5
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -141.0
-offset_right = 208.0
+offset_left = 22.0
+offset_top = -137.0
+offset_right = 230.0
+offset_bottom = 4.0
 grow_vertical = 0
 text = "Masks: 0
 "
 label_settings = SubResource("LabelSettings_n7ghd")
 
+[node name="HelpLabel" type="Label" parent="HUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -75.0
+offset_right = 232.0
+offset_bottom = -33.0
+grow_vertical = 0
+text = "[SPACE] to Use"
+label_settings = SubResource("LabelSettings_nvl01")
+
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10
+visible = false
 
 [node name="JumpscareAnim" type="AnimatedSprite2D" parent="JumpscareLayer"]
 visibility_layer = 3
