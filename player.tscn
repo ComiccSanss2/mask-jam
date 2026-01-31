@@ -1,9 +1,10 @@
-[gd_scene load_steps=90 format=3 uid="uid://cwg7ammc74ip5"]
+[gd_scene load_steps=92 format=3 uid="uid://cwg7ammc74ip5"]
 
 [ext_resource type="Script" uid="uid://jgqkpj8rsgw6" path="res://player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cfk37cbse60oa" path="res://assets/light.png" id="3_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://diqvyrh2do654" path="res://assets/8Direction_TopDown_Character Sprites_ByBossNelNel/SpriteSheet.png" id="3_n7ghd"]
 [ext_resource type="Texture2D" uid="uid://dda442p8l2umc" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-001.png" id="4_n7ghd"]
+[ext_resource type="Shader" uid="uid://hltx7iqku6kl" path="res://player.gdshader" id="5_ivps1"]
 [ext_resource type="Texture2D" uid="uid://b00vg0xrcjrm2" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-002.png" id="5_nvl01"]
 [ext_resource type="AudioStream" uid="uid://db8ljkeiw3ito" path="res://assets/Screamer 1 high pitch.wav" id="5_sweqy"]
 [ext_resource type="Texture2D" uid="uid://cuyx0660q2wp5" path="res://assets/ezgif-61e86833b844d0d8-png-split/ezgif-frame-003.png" id="6_ivps1"]
@@ -562,6 +563,31 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
 size = Vector2(22, 22)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urp6f"]
+shader = ExtResource("5_ivps1")
+shader_parameter/brightness = 1.02
+shader_parameter/contrast = 1.08
+shader_parameter/saturation = 1.1
+shader_parameter/gamma = 1.05
+shader_parameter/curvature = 0.14
+shader_parameter/corner_soften = 0.06
+shader_parameter/vignette = 0.38
+shader_parameter/scanline_strength = 0.95
+shader_parameter/scanline_density = 1.15
+shader_parameter/interlace_strength = 0.2
+shader_parameter/mask_strength = 0.22
+shader_parameter/mask_scale = 1.0
+shader_parameter/chroma_offset_px = 1.6
+shader_parameter/luma_smear_px = 2.2
+shader_parameter/jitter_px = 1.8
+shader_parameter/wobble_px = 1.5
+shader_parameter/tape_noise = 0.22
+shader_parameter/tape_lines = 0.35
+shader_parameter/roll_speed = 0.1
+shader_parameter/roll_strength = 0.15
+shader_parameter/glow_strength = 0.25
+shader_parameter/glow_threshold = 0.65
+
 [sub_resource type="LabelSettings" id="LabelSettings_n7ghd"]
 font_size = 50
 
@@ -623,6 +649,16 @@ energy = 2.0
 texture = ExtResource("3_i3pqv")
 texture_scale = 0.01
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_urp6f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 5
 
@@ -673,6 +709,7 @@ vertical_alignment = 1
 
 [node name="JumpscareLayer" type="CanvasLayer" parent="."]
 layer = 10
+visible = false
 
 [node name="JumpscareAnim" type="AnimatedSprite2D" parent="JumpscareLayer"]
 visibility_layer = 3
