@@ -12,7 +12,7 @@ var current_state = State.WANDER
 # --- RÉFÉRENCES ---
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var timer: Timer = $Timer
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var ray_cast: RayCast2D = $RayCast2D
 @onready var tension_sound: AudioStreamPlayer = $TensionSound
 
