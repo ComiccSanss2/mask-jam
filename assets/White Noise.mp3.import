@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/White Noise.mp3-19d63d86e83d29030660bebdbacaa
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

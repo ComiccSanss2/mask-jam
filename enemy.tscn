@@ -33,7 +33,6 @@ radius = 17.0
 motion_mode = 1
 script = ExtResource("1_4gyqm")
 chase_speed = 145.0
-notice_duration = 0.5
 specific_tension_sound = ExtResource("3_qi2p4")
 jumpscare_scream_sound = ExtResource("3_iifgy")
 jumpscare_anim_name = "jumpscare_enemy1"

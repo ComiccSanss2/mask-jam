@@ -40,7 +40,6 @@ mix_rate = 48000
 motion_mode = 1
 script = ExtResource("1_b3jlp")
 chase_speed = 145.0
-notice_duration = 0.5
 specific_tension_sound = ExtResource("2_cp8lj")
 jumpscare_scream_sound = ExtResource("2_fb6pl")
 jumpscare_anim_name = "jumpscare_enemy2"

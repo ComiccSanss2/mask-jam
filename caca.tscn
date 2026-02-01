@@ -1999,7 +1999,7 @@ size = Vector2(98, 78)
 size = Vector2(77, 765.5)
 
 [node name="caca" type="Node2D"]
-position = Vector2(1, 87)
+position = Vector2(-6, 80)
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
