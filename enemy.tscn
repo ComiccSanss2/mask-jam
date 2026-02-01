@@ -32,6 +32,9 @@ radius = 27.0
 [node name="Enemy" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_4gyqm")
+wander_speed = 67.0
+chase_speed = 160.0
+wander_range = 420.0
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
