@@ -1,18 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://c6sjcd6xxo2hm"]
+[gd_scene load_steps=9 format=3 uid="uid://0br0p5paykof"]
 
-[ext_resource type="Script" uid="uid://0dhrr2xq0ony" path="res://enemy.gd" id="1_4gyqm"]
-[ext_resource type="Texture2D" uid="uid://cbnlbmbjpo0gp" path="res://assets/scarymobs/cosmic_horror_dude.png" id="2_qi2p4"]
-[ext_resource type="AudioStream" uid="uid://45cixd6jjyxp" path="res://assets/Screamer 1 slow pitch low.wav" id="3_qi2p4"]
+[ext_resource type="Script" uid="uid://0dhrr2xq0ony" path="res://enemy.gd" id="1_10atn"]
+[ext_resource type="Texture2D" uid="uid://t8qhb0l5jgwr" path="res://assets/scarymobs/beasts.png" id="2_10atn"]
+[ext_resource type="AudioStream" uid="uid://45cixd6jjyxp" path="res://assets/Screamer 1 slow pitch low.wav" id="3_yag85"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iifgy"]
-atlas = ExtResource("2_qi2p4")
-region = Rect2(0, 0, 48, 144)
+[sub_resource type="AtlasTexture" id="AtlasTexture_baq7o"]
+atlas = ExtResource("2_10atn")
+region = Rect2(48, 128, 48, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_epg4t"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_iifgy")
+"texture": SubResource("AtlasTexture_baq7o")
 }],
 "loop": true,
 "name": &"default",
@@ -28,15 +28,15 @@ radius = 284.00705
 [sub_resource type="CircleShape2D" id="CircleShape2D_qi2p4"]
 radius = 17.0
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy3" type="CharacterBody2D"]
 motion_mode = 1
-script = ExtResource("1_4gyqm")
+script = ExtResource("1_10atn")
 chase_speed = 145.0
 notice_duration = 0.5
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(0.6916667, 0.3770833)
+scale = Vector2(0.71979165, 0.62500006)
 sprite_frames = SubResource("SpriteFrames_epg4t")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -65,7 +65,7 @@ collision_mask = 3
 shape = SubResource("CircleShape2D_qi2p4")
 
 [node name="TensionSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_qi2p4")
+stream = ExtResource("3_yag85")
 volume_db = -80.0
 
 [connection signal="target_reached" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_target_reached"]

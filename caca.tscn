@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bonim6fqbnrpd"]
+[gd_scene load_steps=30 format=3 uid="uid://bonim6fqbnrpd"]
 
 [ext_resource type="Texture2D" uid="uid://hnp2jdge4yoj" path="res://assets/New Piskel.png" id="1_l3ps7"]
 [ext_resource type="Texture2D" uid="uid://dx6m3qqrlvqij" path="res://assets/Big 32x32 Tileset/Single Sprite/Full Spritesheet.png" id="2_2th4p"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://bs7b7clj3fkc7" path="res://mask_item.tscn" id="13_g26ji"]
 [ext_resource type="PackedScene" uid="uid://cap5bbum74jif" path="res://door.tscn" id="14_v5rk7"]
 [ext_resource type="PackedScene" uid="uid://sba1apa4so4y" path="res://generator.tscn" id="15_5twr1"]
+[ext_resource type="PackedScene" uid="uid://cwe3v7n0nulu4" path="res://enemy2.tscn" id="16_ra4un"]
+[ext_resource type="PackedScene" uid="uid://0br0p5paykof" path="res://enemy3.tscn" id="17_jni5y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2528b"]
 texture = ExtResource("1_l3ps7")
@@ -1984,12 +1986,6 @@ layer_1/tile_data = PackedInt32Array(786449, 5, 0, 524305, 5, 0, 196613, 5, 1342
 [node name="Enemy" parent="." instance=ExtResource("3_50vqv")]
 position = Vector2(244, -330)
 
-[node name="Enemy2" parent="." instance=ExtResource("3_50vqv")]
-position = Vector2(1016, -321)
-
-[node name="Enemy3" parent="." instance=ExtResource("3_50vqv")]
-position = Vector2(814, 652)
-
 [node name="Player" parent="." instance=ExtResource("4_uco6l")]
 position = Vector2(147, 1047)
 
@@ -2054,3 +2050,9 @@ target_door = NodePath("../StaticBody2D")
 position = Vector2(905.00006, -455.99997)
 scale = Vector2(0.7, 0.7)
 target_door = NodePath("../StaticBody2D")
+
+[node name="Enemy2" parent="." instance=ExtResource("16_ra4un")]
+position = Vector2(1002, -317)
+
+[node name="Enemy3" parent="." instance=ExtResource("17_jni5y")]
+position = Vector2(810, 650)

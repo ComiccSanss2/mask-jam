@@ -1,13 +1,15 @@
 extends CharacterBody2D
 
 # --- ÉTATS ---
-enum State { WANDER, CHASE }
+# Ajout de l'état NOTICE
+enum State { WANDER, NOTICE, CHASE }
 var current_state = State.WANDER
 
 # --- PARAMÈTRES ---
 @export var wander_speed = 100.0
-@export var chase_speed = 165.0
+@export var chase_speed = 160.0
 @export var wander_range = 250.0
+@export var notice_duration = 1.0 # Le temps de pause avant l'attaque
 
 # --- RÉFÉRENCES ---
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -63,22 +65,45 @@ func _physics_process(delta):
 	
 	# --- 2. GESTION DES ÉTATS ---
 	if can_see_player:
-		current_state = State.CHASE
-		timer.stop()
-		stuck_timer = 0
+		# Si on était en train de se balader, on marque une pause (NOTICE)
+		if current_state == State.WANDER:
+			start_notice_delay()
+		
+		# Si on est déjà en NOTICE ou CHASE, on ne fait rien de spécial ici
+		# La transition NOTICE -> CHASE se fait via le timer
+			
 	else:
-		if current_state == State.CHASE:
+		# Si on perd le joueur de vue, on retourne patrouiller
+		if current_state == State.CHASE or current_state == State.NOTICE:
 			current_state = State.WANDER
 			get_new_wander_target()
 
 	# --- 3. DÉPLACEMENT ---
 	var current_speed = wander_speed
 	
-	if current_state == State.CHASE:
-		current_speed = chase_speed
-		if player_ref:
-			nav_agent.target_position = player_ref.global_position
-	
+	# Gestion spécifique selon l'état
+	match current_state:
+		State.NOTICE:
+			# PENDANT LE NOTICE : ON STOPPE TOUT
+			velocity = Vector2.ZERO
+			# Petit effet visuel optionnel : se tourner vers le joueur
+			if player_ref:
+				var dir = global_position.direction_to(player_ref.global_position)
+				if dir.x > 0: sprite.flip_h = false
+				elif dir.x < 0: sprite.flip_h = true
+			move_and_slide()
+			return # On arrête la fonction ici pour ne pas calculer le pathfinding
+
+		State.CHASE:
+			current_speed = chase_speed
+			timer.stop() # On s'assure que le timer de wander est coupé
+			if player_ref:
+				nav_agent.target_position = player_ref.global_position
+				
+		State.WANDER:
+			current_speed = wander_speed
+
+	# Logique de mouvement standard (pour Wander et Chase)
 	if nav_agent.is_navigation_finished():
 		if current_state == State.WANDER and timer.is_stopped():
 			velocity = Vector2.ZERO
@@ -101,7 +126,7 @@ func _physics_process(delta):
 	var next_pos = nav_agent.get_next_path_position()
 	var new_velocity = global_position.direction_to(next_pos) * current_speed
 	
-	# Application avec inertie (pour faire plus naturel)
+	# Application avec inertie
 	velocity = velocity.move_toward(new_velocity, 1200 * delta)
 	
 	# Gestion du Sprite (Gauche/Droite)
@@ -109,6 +134,22 @@ func _physics_process(delta):
 	elif velocity.x < 0: sprite.flip_h = true
 	
 	move_and_slide()
+
+# --- NOUVELLE FONCTION POUR LE DÉLAI ---
+func start_notice_delay():
+	current_state = State.NOTICE
+	velocity = Vector2.ZERO
+	timer.stop() # On arrête le timer de patrouille
+	
+	# On crée un petit timer temporaire de 0.5 seconde
+	# create_timer crée un timer qui se détruit tout seul à la fin
+	await get_tree().create_timer(notice_duration).timeout
+	
+	# Vérification de sécurité : est-ce qu'on est TOUJOURS en mode Notice ?
+	# (Le joueur pourrait s'être caché entre temps)
+	if current_state == State.NOTICE:
+		current_state = State.CHASE
+		stuck_timer = 0
 
 # --- FONCTIONS DE NAVIGATION ---
 
@@ -127,24 +168,20 @@ func _on_timer_timeout():
 
 func play_tension():
 	if audio_tween: audio_tween.kill()
-	
 	if not tension_sound.playing:
 		tension_sound.volume_db = -80.0
 		tension_sound.play()
-	
 	audio_tween = get_tree().create_tween()
 	audio_tween.tween_property(tension_sound, "volume_db", 0.0, 2.0)
 
 func stop_tension():
 	if audio_tween: audio_tween.kill()
-	
 	audio_tween = get_tree().create_tween()
 	audio_tween.tween_property(tension_sound, "volume_db", -80.0, 3.0)
 	audio_tween.tween_callback(tension_sound.stop)
 
-# --- SIGNAUX  ---
+# --- SIGNAUX ---
 
-# 1. Detection Area 
 func _on_detection_area_body_entered(body):
 	if body.name == "Player":
 		player_ref = body
@@ -154,13 +191,12 @@ func _on_detection_area_body_exited(body):
 	if body.name == "Player":
 		player_ref = null
 		stop_tension() 
-		if current_state == State.CHASE:
+		# Si on quitte la zone, on reset tout en Wander
+		if current_state == State.CHASE or current_state == State.NOTICE:
 			current_state = State.WANDER
 			get_new_wander_target()
 
-# 2. Kill Area 
 func _on_kill_area_body_entered(body):
 	if body.name == "Player":
-		
 		if body.has_method("kill_player"):
 			body.kill_player()
