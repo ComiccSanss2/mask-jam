@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c6sjcd6xxo2hm"]
+[gd_scene load_steps=10 format=3 uid="uid://c6sjcd6xxo2hm"]
 
 [ext_resource type="Script" uid="uid://0dhrr2xq0ony" path="res://enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://cbnlbmbjpo0gp" path="res://assets/scarymobs/cosmic_horror_dude.png" id="2_qi2p4"]
+[ext_resource type="AudioStream" uid="uid://db8ljkeiw3ito" path="res://assets/Screamer 1 high pitch.wav" id="3_iifgy"]
 [ext_resource type="AudioStream" uid="uid://45cixd6jjyxp" path="res://assets/Screamer 1 slow pitch low.wav" id="3_qi2p4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iifgy"]
@@ -33,6 +34,9 @@ motion_mode = 1
 script = ExtResource("1_4gyqm")
 chase_speed = 145.0
 notice_duration = 0.5
+specific_tension_sound = ExtResource("3_qi2p4")
+jumpscare_scream_sound = ExtResource("3_iifgy")
+jumpscare_anim_name = "jumpscare_enemy1"
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

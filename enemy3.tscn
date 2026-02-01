@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://0br0p5paykof"]
+[gd_scene load_steps=10 format=3 uid="uid://0br0p5paykof"]
 
 [ext_resource type="Script" uid="uid://0dhrr2xq0ony" path="res://enemy.gd" id="1_10atn"]
 [ext_resource type="Texture2D" uid="uid://t8qhb0l5jgwr" path="res://assets/scarymobs/beasts.png" id="2_10atn"]
-[ext_resource type="AudioStream" uid="uid://45cixd6jjyxp" path="res://assets/Screamer 1 slow pitch low.wav" id="3_yag85"]
+[ext_resource type="AudioStream" uid="uid://ci57cdw1u5njv" path="res://assets/Puff respiration.wav" id="3_10atn"]
+[ext_resource type="AudioStream" uid="uid://c1adk71lrl2ya" path="res://assets/Grgrgrgr-high-pitch.wav" id="3_baq7o"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_baq7o"]
 atlas = ExtResource("2_10atn")
@@ -33,6 +34,11 @@ motion_mode = 1
 script = ExtResource("1_10atn")
 chase_speed = 145.0
 notice_duration = 0.5
+specific_tension_sound = ExtResource("3_10atn")
+jumpscare_scream_sound = ExtResource("3_baq7o")
+jumpscare_anim_name = "jumpscare_enemy3"
+jumpscare_scale_modifier = 0.6
+jumpscare_width_modifier = 2.5
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
@@ -65,7 +71,7 @@ collision_mask = 3
 shape = SubResource("CircleShape2D_qi2p4")
 
 [node name="TensionSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_yag85")
+stream = ExtResource("3_10atn")
 volume_db = -80.0
 
 [connection signal="target_reached" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_target_reached"]

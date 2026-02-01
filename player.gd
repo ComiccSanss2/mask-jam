@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # --- PARAMÈTRES MOUVEMENT ---
-@export var speed : float = 150.0
+@export var speed : float = 500.0
 @export var acceleration : float = 1500.0
 @export var friction : float = 1200.0
 
@@ -13,8 +13,8 @@ extends CharacterBody2D
 # --- VARIABLES D'ÉTAT ---
 var masks_count : int = 0
 var is_hidden : bool = false 
-var is_repairing : bool = false         # Vrai quand on tient E (Bloque le mouvement)
-var is_reading_dialogue : bool = false  # Vrai quand un texte est affiché (Sert à cacher les labels E)
+var is_repairing : bool = false         
+var is_reading_dialogue : bool = false  
 
 # --- VARIABLES AUDIO ---
 var default_volume_db : float = 0.0 
@@ -25,7 +25,6 @@ var audio_tween : Tween
 @onready var jumpscare_anim = $JumpscareLayer/JumpscareAnim 
 @onready var scream_sound = $ScreamSound
 @onready var light = $PointLight2D
-# Note : Assure-toi d'avoir renommé tes AnimatedSprite2D comme ci-dessous
 @onready var anim_normal = $AnimNormal
 @onready var anim_masked = $AnimMasked
 @onready var footsteps_sound = $FootstepsSound
@@ -39,19 +38,18 @@ var audio_tween : Tween
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	# Sécurité visuelle au démarrage
 	if jumpscare_layer: jumpscare_layer.visible = false
 	if light: light.scale = Vector2(light_normal_size, light_normal_size)
 	if footsteps_sound: default_volume_db = footsteps_sound.volume_db
 	if $HUD: $HUD.visible = true
 	if dialogue_panel: dialogue_panel.visible = false
 	
-	# Gestion des sprites (Sécurité anti-crash)
 	if anim_normal: anim_normal.visible = true
 	if anim_masked: anim_masked.visible = false
 	
 	update_mask_ui()
-	ajuster_jumpscare()
+	# Test par défaut
+	ajuster_jumpscare("default", 1.0, 1.0)
 
 func _physics_process(delta: float) -> void:
 	if get_tree().paused: return
@@ -60,8 +58,6 @@ func _physics_process(delta: float) -> void:
 		try_use_mask()
 
 	# --- SYSTEME DE BLOCAGE ---
-	# On bloque le mouvement UNIQUEMENT si on est en train de réparer (Barre de chargement)
-	# On NE bloque PAS si on lit juste un dialogue.
 	if is_repairing:
 		velocity = Vector2.ZERO
 		if anim_normal: anim_normal.stop()
@@ -70,10 +66,9 @@ func _physics_process(delta: float) -> void:
 		if footsteps_sound.playing and footsteps_sound.volume_db > -60.0:
 			stop_footsteps_smooth()
 		move_and_slide()
-		return # <--- On arrête tout ici
+		return 
 	# --------------------------
 
-	# Mouvements normaux
 	var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_vector != Vector2.ZERO:
@@ -119,15 +114,29 @@ func stop_footsteps_smooth():
 	audio_tween.tween_property(footsteps_sound, "volume_db", -80.0, 0.25)
 	audio_tween.tween_callback(footsteps_sound.stop)
 
-# --- JUMPSCARE ---
-func ajuster_jumpscare():
+# --- JUMPSCARE (MODIFIÉ) ---
+# Ajout du paramètre width_mod
+func ajuster_jumpscare(anim_name: String, scale_mod: float, width_mod: float):
 	var ecran_size = get_viewport_rect().size
 	jumpscare_anim.position = ecran_size / 2
-	var texture = jumpscare_anim.sprite_frames.get_frame_texture("default", 0)
+	
+	var texture = null
+	if jumpscare_anim.sprite_frames.has_animation(anim_name):
+		texture = jumpscare_anim.sprite_frames.get_frame_texture(anim_name, 0)
+	else:
+		texture = jumpscare_anim.sprite_frames.get_frame_texture("default", 0)
+		
 	if texture:
 		var image_size = texture.get_size()
-		var final_scale = max(ecran_size.x / image_size.x, ecran_size.y / image_size.y)
-		jumpscare_anim.scale = Vector2(final_scale, final_scale)
+		var base_scale = max(ecran_size.x / image_size.x, ecran_size.y / image_size.y)
+		
+		# --- MODIFICATION ICI ---
+		# On applique scale_mod partout (Zoom)
+		# On applique width_mod seulement sur X (Largeur)
+		jumpscare_anim.scale = Vector2(
+			base_scale * scale_mod * width_mod, 
+			base_scale * scale_mod
+		)
 
 # --- MASQUE ---
 func add_mask():
@@ -168,10 +177,7 @@ func deactivate_stealth_mode():
 # --- DIALOGUE SYSTEM ---
 func show_dialogue(text_to_show: String):
 	if dialogue_panel and dialogue_label:
-		# On signale qu'on lit (pour cacher les labels E)
-		# MAIS on ne bloque pas le mouvement (car pas utilisé dans _physics_process)
 		is_reading_dialogue = true
-		
 		dialogue_label.text = text_to_show
 		dialogue_panel.visible = true
 		
@@ -181,15 +187,29 @@ func show_dialogue(text_to_show: String):
 			dialogue_panel.visible = false
 			is_reading_dialogue = false
 
-# --- MORT ---
-func kill_player():
+# --- MORT (MODIFIÉ) ---
+# Ajout du paramètre width_mod (défaut 1.0)
+func kill_player(jumpscare_name: String = "default", jumpscare_sound_file: AudioStream = null, scale_mod: float = 1.0, width_mod: float = 1.0):
 	if get_tree().paused: return
+	
 	if audio_tween: audio_tween.kill() 
 	footsteps_sound.stop()
-	ajuster_jumpscare()
+	
+	# On envoie tout au calcul
+	ajuster_jumpscare(jumpscare_name, scale_mod, width_mod)
+	
 	jumpscare_layer.visible = true
-	jumpscare_anim.play("default")
-	if scream_sound: scream_sound.play()
+	
+	if jumpscare_anim.sprite_frames.has_animation(jumpscare_name):
+		jumpscare_anim.play(jumpscare_name)
+	else:
+		jumpscare_anim.play("default")
+	
+	if scream_sound:
+		if jumpscare_sound_file != null:
+			scream_sound.stream = jumpscare_sound_file
+		scream_sound.play()
+	
 	get_tree().paused = true
 	await jumpscare_anim.animation_finished
 	get_tree().paused = false
