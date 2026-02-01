@@ -1971,6 +1971,7 @@ sources/3 = SubResource("TileSetAtlasSource_jni5y")
 sources/8 = SubResource("TileSetAtlasSource_oj0r0")
 
 [node name="caca" type="Node2D"]
+position = Vector2(1, 0)
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
@@ -2006,6 +2007,11 @@ scale = Vector2(3, 3)
 
 [node name="Generator" parent="." node_paths=PackedStringArray("target_door") instance=ExtResource("15_5twr1")]
 position = Vector2(179, -459)
+scale = Vector2(0.7, 0.7)
+target_door = NodePath("../StaticBody2D")
+
+[node name="Generator4" parent="." node_paths=PackedStringArray("target_door") instance=ExtResource("15_5twr1")]
+position = Vector2(179, 887)
 scale = Vector2(0.7, 0.7)
 target_door = NodePath("../StaticBody2D")
 

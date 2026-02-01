@@ -562,7 +562,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
-size = Vector2(22, 22)
+size = Vector2(25, 27)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_urp6f"]
 shader = ExtResource("5_ivps1")
@@ -641,7 +641,7 @@ sprite_frames = SubResource("SpriteFrames_iruf7")
 animation = &"walk-down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, 7)
+position = Vector2(1.5, 4.5)
 shape = SubResource("RectangleShape2D_onrkg")
 
 [node name="Camera2D" type="Camera2D" parent="."]

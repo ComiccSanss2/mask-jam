@@ -1,11 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://sba1apa4so4y"]
+[gd_scene load_steps=9 format=3 uid="uid://sba1apa4so4y"]
 
 [ext_resource type="Script" uid="uid://cstticfc7th0" path="res://generator.gd" id="1_k6sox"]
 [ext_resource type="Texture2D" uid="uid://butngaw2dxcms" path="res://assets/8Direction_TopDown_Character Sprites_ByBossNelNel/generator-off.png" id="1_yybav"]
 [ext_resource type="Texture2D" uid="uid://05x67opg6w7y" path="res://assets/8Direction_TopDown_Character Sprites_ByBossNelNel/generator-on.png" id="2_r36sx"]
+[ext_resource type="AudioStream" uid="uid://cou7mog2fax57" path="res://assets/buzz.wav" id="4_l0m0h"]
+[ext_resource type="Texture2D" uid="uid://cfk37cbse60oa" path="res://assets/light.png" id="5_v8oxa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k6sox"]
 radius = 39.012817
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v8oxa"]
+bg_color = Color(0.16171482, 0.16171485, 0, 0.45882353)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_falek"]
+bg_color = Color(0.84313726, 0.62352943, 0.16078432, 1)
 
 [node name="Generator" type="StaticBody2D"]
 script = ExtResource("1_k6sox")
@@ -24,3 +32,25 @@ texture = ExtResource("2_r36sx")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(-1, 10)
 shape = SubResource("CircleShape2D_k6sox")
+
+[node name="BuzzSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_l0m0h")
+volume_db = 5.39
+max_distance = 350.0
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0, 1, 1, 1)
+energy = 0.0
+shadow_enabled = true
+texture = ExtResource("5_v8oxa")
+texture_scale = 1.22
+
+[node name="RepairBar" type="ProgressBar" parent="."]
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = -23.0
+scale = Vector2(1, 0.48000002)
+theme_override_styles/background = SubResource("StyleBoxFlat_v8oxa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_falek")
+show_percentage = false

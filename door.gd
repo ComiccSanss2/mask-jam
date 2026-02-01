@@ -2,7 +2,7 @@ extends StaticBody2D
 
 # --- PARAMÈTRES ---
 var generators_fixed_count : int = 0
-var total_generators_needed : int = 3 # <--- ON PASSE À 3 ICI
+var total_generators_needed : int = 4 # <--- ON PASSE À 4 ICI
 var is_open : bool = false
 var current_player_ref = null 
 
@@ -32,7 +32,11 @@ func check_door_status():
 	if generators_fixed_count < total_generators_needed:
 		# Calcul pour dire combien il en reste
 		var remaining = total_generators_needed - generators_fixed_count
-		current_player_ref.show_dialogue("NEED " + str(remaining) + " MORE POWER SUPPLIES.")
+		# Petite gestion pluriel/singulier pour le fun
+		if remaining > 1:
+			current_player_ref.show_dialogue("NEED " + str(remaining) + " MORE POWER SUPPLY.")
+		else:
+			current_player_ref.show_dialogue("NEED 1 MORE POWER SUPPLY.")
 
 # --- LOGIQUE ---
 func fix_generator():
@@ -47,13 +51,13 @@ func open_door():
 	
 	# --- LA PORTE DISPARAÎT ---
 	sprite_closed.visible = false
-	sprite_open.visible = false # On cache tout
+	sprite_open.visible = false 
 	
 	# On enlève le mur physique
 	collision.set_deferred("disabled", true)
 	
 	if current_player_ref:
-		current_player_ref.show_dialogue("DOOR OPENED !")
+		current_player_ref.show_dialogue("DOOR OPENED.")
 
 func close_door():
 	is_open = false

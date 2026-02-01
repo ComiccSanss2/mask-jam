@@ -27,7 +27,7 @@ height = 49.0
 radius = 284.00705
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qi2p4"]
-radius = 21.0
+radius = 27.0
 
 [node name="Enemy" type="CharacterBody2D"]
 motion_mode = 1
