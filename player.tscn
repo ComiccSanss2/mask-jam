@@ -1075,7 +1075,7 @@ script = ExtResource("1_onrkg")
 [node name="ScreamSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_sweqy")
 
-[node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
+[node name="AnimNormal" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_iruf7")
 animation = &"walk-down"

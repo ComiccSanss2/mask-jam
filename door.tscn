@@ -1,13 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://cap5bbum74jif"]
+[gd_scene load_steps=7 format=3 uid="uid://cap5bbum74jif"]
 
 [ext_resource type="Texture2D" uid="uid://dqsteeg547lpo" path="res://assets/craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art/2 Dungeon Tileset/2 Objects/Doors/3.png" id="1_ba8gm"]
 [ext_resource type="Script" uid="uid://c5amlr1hgwgmh" path="res://door.gd" id="1_v6xrn"]
+[ext_resource type="FontFile" uid="uid://dsmpymda21d0v" path="res://assets/real-vhs-font/RealVhsFontRegular-WyV0z.ttf" id="3_0phs7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ba8gm"]
 size = Vector2(34, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6xrn"]
-size = Vector2(34, 61)
+size = Vector2(34, 27)
+
+[sub_resource type="LabelSettings" id="LabelSettings_50cdl"]
+font = ExtResource("3_0phs7")
+font_size = 25
+font_color = Color(1, 1, 0, 1)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 script = ExtResource("1_v6xrn")
@@ -25,8 +31,17 @@ shape = SubResource("RectangleShape2D_ba8gm")
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, 17.5)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_v6xrn")
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+offset_left = -8.0
+offset_top = -27.0
+offset_right = 10.0
+offset_bottom = -7.0
+text = "[E]"
+label_settings = SubResource("LabelSettings_50cdl")
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
