@@ -13,7 +13,6 @@ extends CharacterBody2D
 # --- VARIABLES ---
 var masks_count : int = 0
 var is_hidden : bool = false 
-
 # NOUVELLE VARIABLE POUR BLOQUER LE MOUVEMENT
 var is_repairing : bool = false 
 
@@ -22,14 +21,14 @@ var default_volume_db : float = 0.0
 var audio_tween : Tween
 
 # --- RÉFÉRENCES ---
-# Jumpscare
 @onready var jumpscare_layer = $JumpscareLayer
 @onready var jumpscare_anim = $JumpscareLayer/JumpscareAnim 
 @onready var scream_sound = $ScreamSound
-
-# Personnage & Lumière
 @onready var light = $PointLight2D
-@onready var character_anim = $CharacterAnim
+
+# NOUVELLES RÉFÉRENCES D'ANIMATION
+@onready var anim_normal = $CharacterAnim
+@onready var anim_masked = $AnimMasked
 
 # Audio
 @onready var footsteps_sound = $FootstepsSound
@@ -47,9 +46,13 @@ func _ready():
 	if light: light.scale = Vector2(light_normal_size, light_normal_size)
 	if footsteps_sound: default_volume_db = footsteps_sound.volume_db
 	
-	# Affichage HUD
 	if $HUD: $HUD.visible = true
 	if dialogue_panel: dialogue_panel.visible = false
+	
+	# --- INIT VISUEL ---
+	# On s'assure qu'au démarrage, seul le normal est visible
+	anim_normal.visible = true
+	anim_masked.visible = false
 	
 	update_mask_ui()
 	ajuster_jumpscare()
@@ -57,58 +60,59 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	if get_tree().paused: return
 
-	# 1. Utilisation du Masque (Toujours autorisé ?)
 	if Input.is_action_just_pressed("use_mask"):
 		try_use_mask()
 
 	# --- SYSTEME DE BLOCAGE (REPARATION) ---
 	if is_repairing:
-		# On arrête tout mouvement
 		velocity = Vector2.ZERO
-		character_anim.stop()
+		# On stoppe LES DEUX animations
+		anim_normal.stop()
+		anim_masked.stop()
 		
-		# On coupe le son des pas proprement
 		if footsteps_sound.playing and footsteps_sound.volume_db > -60.0:
 			stop_footsteps_smooth()
-			
 		move_and_slide()
-		return # <--- ON ARRÊTE LA FONCTION ICI (Pas de mouvement possible)
+		return 
 	# ---------------------------------------
 
-	# 2. Mouvement Normal
 	var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_vector != Vector2.ZERO:
-		# --- ON BOUGE ---
 		velocity = velocity.move_toward(input_vector * speed, acceleration * delta)
 		update_animation(input_vector)
 		
-		# Audio : Fade In
 		if not footsteps_sound.playing or footsteps_sound.volume_db <= -60.0:
 			play_footsteps_smooth()
 			
 	else:
-		# --- ON NE BOUGE PLUS ---
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-		character_anim.stop()
+		# On stoppe LES DEUX animations
+		anim_normal.stop()
+		anim_masked.stop()
 		
-		# Audio : Fade Out
 		if footsteps_sound.playing and footsteps_sound.volume_db > -60.0:
 			stop_footsteps_smooth()
 
 	move_and_slide()
 
-# --- GESTION ANIMATION 8 DIRECTIONS ---
+# --- GESTION ANIMATION 8 DIRECTIONS (Modifiée) ---
 func update_animation(direction: Vector2):
 	var anim_name = "walk"
 	if direction.y < 0: anim_name += "-up"
 	elif direction.y > 0: anim_name += "-down"
 	if direction.x < 0: anim_name += "-left"
 	elif direction.x > 0: anim_name += "-right"
-	if character_anim.sprite_frames.has_animation(anim_name):
-		character_anim.play(anim_name)
+	
+	# Astuce : On joue l'animation sur LES DEUX en même temps.
+	# Comme ça, ils sont toujours synchronisés quand on change la visibilité.
+	if anim_normal.sprite_frames.has_animation(anim_name):
+		anim_normal.play(anim_name)
+		
+	if anim_masked.sprite_frames.has_animation(anim_name):
+		anim_masked.play(anim_name)
 
-# --- GESTION AUDIO (FADES) ---
+# --- AUDIO FADES (Inchangé) ---
 func play_footsteps_smooth():
 	if audio_tween: audio_tween.kill()
 	if not footsteps_sound.playing:
@@ -124,7 +128,7 @@ func stop_footsteps_smooth():
 	audio_tween.tween_property(footsteps_sound, "volume_db", -80.0, 0.25)
 	audio_tween.tween_callback(footsteps_sound.stop)
 
-# --- JUMPSCARE ---
+# --- JUMPSCARE (Inchangé) ---
 func ajuster_jumpscare():
 	var ecran_size = get_viewport_rect().size
 	jumpscare_anim.position = ecran_size / 2
@@ -134,7 +138,7 @@ func ajuster_jumpscare():
 		var final_scale = max(ecran_size.x / image_size.x, ecran_size.y / image_size.y)
 		jumpscare_anim.scale = Vector2(final_scale, final_scale)
 
-# --- SYSTEME DE MASQUE ---
+# --- SYSTEME DE MASQUE (Modifié) ---
 func add_mask():
 	masks_count += 1
 	update_mask_ui()
@@ -154,6 +158,11 @@ func try_use_mask():
 func activate_stealth_mode():
 	is_hidden = true
 	if help_label: help_label.visible = false
+	
+	# --- CHANGEMENT VISUEL ICI ---
+	anim_normal.visible = false # On cache le normal
+	anim_masked.visible = true  # On affiche le masqué
+	
 	if light:
 		var tween = get_tree().create_tween()
 		tween.tween_property(light, "scale", Vector2(light_hidden_size, light_hidden_size), 0.5)
@@ -163,11 +172,16 @@ func activate_stealth_mode():
 func deactivate_stealth_mode():
 	is_hidden = false
 	update_mask_ui()
+	
+	# --- RETOUR VISUEL NORMAL ICI ---
+	anim_masked.visible = false # On cache le masqué
+	anim_normal.visible = true  # On affiche le normal
+	
 	if light:
 		var tween = get_tree().create_tween()
 		tween.tween_property(light, "scale", Vector2(light_normal_size, light_normal_size), 0.5)
 
-# --- DIALOGUE UNIVERSEL ---
+# --- DIALOGUE UNIVERSEL (Inchangé) ---
 func show_dialogue(text_to_show: String):
 	if dialogue_panel and dialogue_label:
 		dialogue_label.text = text_to_show
@@ -176,7 +190,7 @@ func show_dialogue(text_to_show: String):
 		if dialogue_label.text == text_to_show:
 			dialogue_panel.visible = false
 
-# --- MORT ---
+# --- MORT (Inchangé) ---
 func kill_player():
 	if get_tree().paused: return
 	print("JUMPSCARE !")

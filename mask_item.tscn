@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bs7b7clj3fkc7"]
+[gd_scene load_steps=7 format=3 uid="uid://bs7b7clj3fkc7"]
 
 [ext_resource type="Script" uid="uid://ceabil2tin3fx" path="res://mask_item.gd" id="1_nt046"]
+[ext_resource type="Texture2D" uid="uid://d17j1q5xwnaew" path="res://assets/New Piskel (7).png" id="2_mc1qy"]
 [ext_resource type="Texture2D" uid="uid://fsdsck65o2p4" path="res://assets/new-mask.png" id="2_wcjoa"]
 [ext_resource type="FontFile" uid="uid://dsmpymda21d0v" path="res://assets/real-vhs-font/RealVhsFontRegular-WyV0z.ttf" id="3_wcjoa"]
 
@@ -15,8 +16,15 @@ font_color = Color(1, 1, 0.3764706, 1)
 [node name="MaskItem" type="Area2D"]
 script = ExtResource("1_nt046")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="ShadowSprite" type="Sprite2D" parent="."]
 texture_filter = 1
+position = Vector2(0, 11)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_mc1qy")
+
+[node name="VisualSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -10)
 texture = ExtResource("2_wcjoa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -25,8 +33,8 @@ shape = SubResource("CircleShape2D_nt046")
 [node name="Label" type="Label" parent="."]
 texture_filter = 1
 offset_left = -75.0
-offset_top = -49.0
+offset_top = -55.0
 offset_right = 79.0
-offset_bottom = -25.0
+offset_bottom = -31.0
 text = "[E] TO TAKE MASK."
 label_settings = SubResource("LabelSettings_mc1qy")
