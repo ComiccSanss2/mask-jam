@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bs7b7clj3fkc7"]
 
 [ext_resource type="Script" uid="uid://ceabil2tin3fx" path="res://mask_item.gd" id="1_nt046"]
-[ext_resource type="Texture2D" uid="uid://b11xwt8fum5gc" path="res://assets/mask-item.png" id="2_nt046"]
+[ext_resource type="Texture2D" uid="uid://fsdsck65o2p4" path="res://assets/new-mask.png" id="2_wcjoa"]
 [ext_resource type="FontFile" uid="uid://dsmpymda21d0v" path="res://assets/real-vhs-font/RealVhsFontRegular-WyV0z.ttf" id="3_wcjoa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nt046"]
@@ -17,7 +17,7 @@ script = ExtResource("1_nt046")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-texture = ExtResource("2_nt046")
+texture = ExtResource("2_wcjoa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_nt046")
